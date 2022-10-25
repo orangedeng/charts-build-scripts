@@ -8,10 +8,10 @@ RUN zypper -n in git-core curl tar gzip docker wget awk hostname make patch dock
     rm -rf /tmp/* /var/tmp/* /usr/share/doc/packages/*
 
 RUN if [ "${ARCH}" == "amd64" ]; then \
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.47.3; \
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.47.3; \
     fi
 
-ENV DAPPER_ENV REPO TAG DRONE_TAG CROSS
+ENV DAPPER_ENV REPO TAG DRONE_TAG CROSS GOPROXY
 ENV DAPPER_SOURCE /go/src/github.com/rancher/charts-build-scripts/
 ENV DAPPER_OUTPUT ./bin ./dist
 ENV DAPPER_DOCKER_SOCKET true

@@ -39,7 +39,9 @@ func ExportHelmChart(rootFs, fs billy.Filesystem, helmChartPath string, packageV
 	}
 	chartVersion := chart.Metadata.Version
 	toParse := chartVersion
+	var prefix bool
 	if strings.HasPrefix(chartVersion, "v") {
+		prefix = true
 		toParse = chartVersion[1:]
 	}
 	chartVersionSemver, err := semver.Make(toParse)
@@ -62,6 +64,11 @@ func ExportHelmChart(rootFs, fs billy.Filesystem, helmChartPath string, packageV
 	if !omitBuildMetadata && len(upstreamChartVersion) > 0 && upstreamChartVersion != chartVersionSemver.String() {
 		// Add buildMetadataFlag for forked charts
 		chartVersionSemver.Build = append(chartVersionSemver.Build, fmt.Sprintf("up%s", upstreamChartVersion))
+	}
+
+	chartVersion = chartVersionSemver.String()
+	if prefix {
+		chartVersion = "v" + chartVersion
 	}
 
 	// Assets are indexed by chart name, independent of which package that chart is contained within
